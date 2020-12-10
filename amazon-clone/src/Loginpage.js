@@ -1,16 +1,26 @@
 import React, { useState } from 'react'
-import "./Loginpage.css"
-import {Link} from "react-router-dom";
+import "./Loginpage.css";
+import {auth } from "./firebase";
+import {Link, useHistory} from "react-router-dom";
 function Loginpage() {
+    const history=useHistory();
     const [email, setEmail] = useState('');
-    const [password, setpassword] = useState('');
+    const [password, setPassword] = useState('');
+    
     const signIn = e =>{
         e.preventDefault();
+        auth.signInWithEmailAndPassword(email,password).then(auth => {
+            history.push('/')
+        }).catch(error => alert(error.message))
         // fancy firbase tings
     }
     const register = e =>{
         e.preventDefault();
-        // fancy firbase tings
+        auth.createUserWithEmailAndPassword(email,password).then((auth)=> {
+            if(auth) {
+                history.push('/')
+            }
+        }).catch(error => alert(error.message))
     }
     return (
         <div className='login'>
